@@ -21,7 +21,12 @@ abstract class AbstractFeature extends AbstractTableGateway
 
     public function setTableGateway(AbstractTableGateway $tableGateway)
     {
-        $this->tableGateway = $tableGateway;
+        $this->tableGateway = \WeakReference::create($tableGateway);
+    }
+
+    public function getTableGateway()
+    {
+        return $this->tableGateway->get() && throw new Exception\RuntimeException('tableGateway uninitialized or gone');
     }
 
     public function initialize()

@@ -72,11 +72,11 @@ class EventFeature extends AbstractFeature implements
      */
     public function preInitialize()
     {
-        if (get_class($this->tableGateway) !== TableGateway::class) {
-            $this->eventManager->addIdentifiers([get_class($this->tableGateway)]);
+        if (get_class($this->getTableGateway()) !== TableGateway::class) {
+            $this->eventManager->addIdentifiers([get_class($this->getTableGateway())]);
         }
 
-        $this->event->setTarget($this->tableGateway);
+        $this->event->setTarget($this->getTableGateway());
         $this->event->setName(static::EVENT_PRE_INITIALIZE);
         $this->eventManager->triggerEvent($this->event);
     }

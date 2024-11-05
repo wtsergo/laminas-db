@@ -46,12 +46,12 @@ class MasterSlaveFeature extends AbstractFeature
      */
     public function postInitialize()
     {
-        $this->masterSql = $this->tableGateway->sql;
+        $this->masterSql = $this->getTableGateway()->sql;
         if ($this->slaveSql === null) {
             $this->slaveSql = new Sql(
                 $this->slaveAdapter,
-                $this->tableGateway->sql->getTable(),
-                $this->tableGateway->sql->getSqlPlatform()
+                $this->getTableGateway()->sql->getTable(),
+                $this->getTableGateway()->sql->getSqlPlatform()
             );
         }
     }
@@ -62,7 +62,7 @@ class MasterSlaveFeature extends AbstractFeature
      */
     public function preSelect()
     {
-        $this->tableGateway->sql = $this->slaveSql;
+        $this->getTableGateway()->sql = $this->slaveSql;
     }
 
     /**
@@ -71,6 +71,6 @@ class MasterSlaveFeature extends AbstractFeature
      */
     public function postSelect()
     {
-        $this->tableGateway->sql = $this->masterSql;
+        $this->getTableGateway()->sql = $this->masterSql;
     }
 }

@@ -54,7 +54,7 @@ class SequenceFeature extends AbstractFeature
     public function postInsert(StatementInterface $statement, ResultInterface $result)
     {
         if ($this->sequenceValue !== null) {
-            $this->tableGateway->lastInsertValue = $this->sequenceValue;
+            $this->getTableGateway()->lastInsertValue = $this->sequenceValue;
         }
     }
 
@@ -65,7 +65,7 @@ class SequenceFeature extends AbstractFeature
      */
     public function nextSequenceId()
     {
-        $platform     = $this->tableGateway->adapter->getPlatform();
+        $platform     = $this->getTableGateway()->adapter->getPlatform();
         $platformName = $platform->getName();
 
         switch ($platformName) {
@@ -79,7 +79,7 @@ class SequenceFeature extends AbstractFeature
                 return;
         }
 
-        $statement = $this->tableGateway->adapter->createStatement();
+        $statement = $this->getTableGateway()->adapter->createStatement();
         $statement->prepare($sql);
         $result   = $statement->execute();
         $sequence = $result->current();
@@ -94,7 +94,7 @@ class SequenceFeature extends AbstractFeature
      */
     public function lastSequenceId()
     {
-        $platform     = $this->tableGateway->adapter->getPlatform();
+        $platform     = $this->getTableGateway()->adapter->getPlatform();
         $platformName = $platform->getName();
 
         switch ($platformName) {
@@ -108,7 +108,7 @@ class SequenceFeature extends AbstractFeature
                 return;
         }
 
-        $statement = $this->tableGateway->adapter->createStatement();
+        $statement = $this->getTableGateway()->adapter->createStatement();
         $statement->prepare($sql);
         $result   = $statement->execute();
         $sequence = $result->current();

@@ -33,9 +33,9 @@ class FeatureSet
      */
     public function setTableGateway(AbstractTableGateway $tableGateway)
     {
-        $this->tableGateway = $tableGateway;
+        $this->tableGateway = \WeakReference::create($tableGateway);
         foreach ($this->features as $feature) {
-            $feature->setTableGateway($this->tableGateway);
+            $feature->setTableGateway($this->tableGateway->get());
         }
         return $this;
     }
@@ -73,8 +73,8 @@ class FeatureSet
      */
     public function addFeature(AbstractFeature $feature)
     {
-        if ($this->tableGateway instanceof TableGatewayInterface) {
-            $feature->setTableGateway($this->tableGateway);
+        if ($this->tableGateway->get() instanceof TableGatewayInterface) {
+            $feature->setTableGateway($this->tableGateway->get());
         }
         $this->features[] = $feature;
         return $this;

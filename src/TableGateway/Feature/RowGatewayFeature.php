@@ -26,9 +26,9 @@ class RowGatewayFeature extends AbstractFeature
         $args = $this->constructorArguments;
 
         /** @var ResultSet $resultSetPrototype */
-        $resultSetPrototype = $this->tableGateway->resultSetPrototype;
+        $resultSetPrototype = $this->getTableGateway()->resultSetPrototype;
 
-        if (! $this->tableGateway->resultSetPrototype instanceof ResultSet) {
+        if (! $this->getTableGateway()->resultSetPrototype instanceof ResultSet) {
             throw new Exception\RuntimeException(
                 'This feature ' . self::class . ' expects the ResultSet to be an instance of ' . ResultSet::class
             );
@@ -39,8 +39,8 @@ class RowGatewayFeature extends AbstractFeature
                 $primaryKey          = $args[0];
                 $rowGatewayPrototype = new RowGateway(
                     $primaryKey,
-                    $this->tableGateway->table,
-                    $this->tableGateway->adapter
+                    $this->getTableGateway()->table,
+                    $this->getTableGateway()->adapter
                 );
                 $resultSetPrototype->setArrayObjectPrototype($rowGatewayPrototype);
             } elseif ($args[0] instanceof RowGatewayInterface) {
@@ -49,7 +49,7 @@ class RowGatewayFeature extends AbstractFeature
             }
         } else {
             // get from metadata feature
-            $metadata = $this->tableGateway->featureSet->getFeatureByClassName(
+            $metadata = $this->getTableGateway()->featureSet->getFeatureByClassName(
                 MetadataFeature::class
             );
             if ($metadata === false || ! isset($metadata->sharedData['metadata'])) {
@@ -61,8 +61,8 @@ class RowGatewayFeature extends AbstractFeature
             $primaryKey          = $metadata->sharedData['metadata']['primaryKey'];
             $rowGatewayPrototype = new RowGateway(
                 $primaryKey,
-                $this->tableGateway->table,
-                $this->tableGateway->adapter
+                $this->getTableGateway()->table,
+                $this->getTableGateway()->adapter
             );
             $resultSetPrototype->setArrayObjectPrototype($rowGatewayPrototype);
         }
