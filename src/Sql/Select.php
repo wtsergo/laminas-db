@@ -68,6 +68,7 @@ class Select extends AbstractPreparableSql
     public const COMBINE_UNION       = 'union';
     public const COMBINE_EXCEPT      = 'except';
     public const COMBINE_INTERSECT   = 'intersect';
+    public const FOR_UPDATE          = 'for_update';
     /**#@-*/
 
     /**
@@ -158,6 +159,9 @@ class Select extends AbstractPreparableSql
 
     /** @var array */
     protected $combine = [];
+
+    /** @var bool */
+    protected $forUpdate = false;
 
     /**
      * Constructor
@@ -447,7 +451,16 @@ class Select extends AbstractPreparableSql
             case self::COMBINE:
                 $this->combine = [];
                 break;
+            case self::FOR_UPDATE:
+                $this->forUpdate = false;
+                break;
         }
+        return $this;
+    }
+
+    public function forUpdate($forUpdate)
+    {
+        $this->forUpdate = (bool)$forUpdate;
         return $this;
     }
 
@@ -483,6 +496,7 @@ class Select extends AbstractPreparableSql
             self::LIMIT      => $this->limit,
             self::OFFSET     => $this->offset,
             self::COMBINE    => $this->combine,
+            self::FOR_UPDATE => $this->forUpdate,
         ];
         return isset($key) && array_key_exists($key, $rawState) ? $rawState[$key] : $rawState;
     }

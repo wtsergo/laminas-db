@@ -66,4 +66,19 @@ class SelectDecorator extends Select implements PlatformDecoratorInterface
 
         return [$this->offset];
     }
+
+    /** @return string[]|null */
+    protected function processStatementEnd(
+        PlatformInterface $platform,
+        ?DriverInterface $driver = null,
+        ?ParameterContainer $parameterContainer = null
+    ) {
+        $statementEnd = parent::processStatementEnd($platform, $driver, $parameterContainer);
+
+        if ($this->subject->getRawState(self::FOR_UPDATE) === true) {
+            $statementEnd .= "$statementEnd FOR UPDATE";
+        }
+
+        return $statementEnd;
+    }
 }
